@@ -1,0 +1,329 @@
+:root {
+  --bg: #0b1020;
+  --surface: #131a30;
+  --border: #26304f;
+  --text: #e8ecf8;
+  --muted: #9aa7c7;
+  --accent: #6c8cff;
+  --good: #22d3a5;
+  --warn: #f5b950;
+  --bad: #ff7a7a;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+/* The result card is display:grid, which would override the hidden
+   attribute without this rule. */
+[hidden] {
+  display: none !important;
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* ---------- nav ---------- */
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: rgba(11, 16, 32, 0.9);
+  backdrop-filter: blur(8px);
+  z-index: 10;
+}
+
+.logo {
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.logo-sub {
+  color: var(--muted);
+  font-weight: 400;
+  margin-left: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.nav nav a {
+  color: var(--muted);
+  text-decoration: none;
+  margin-left: 1.5rem;
+}
+
+.nav nav a:hover {
+  color: var(--text);
+}
+
+/* ---------- hero ---------- */
+
+.hero {
+  text-align: center;
+  padding: 5rem 1.5rem 3rem;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.eyebrow {
+  color: var(--good);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  margin: 0.75rem 0 1rem;
+  line-height: 1.2;
+}
+
+.accent {
+  color: var(--accent);
+}
+
+.lede {
+  color: var(--muted);
+  font-size: 1.1rem;
+  margin-bottom: 1.75rem;
+}
+
+.btn {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  text-decoration: none;
+  padding: 0.8rem 1.6rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.btn:hover {
+  filter: brightness(1.1);
+}
+
+section h2 {
+  font-size: 1.6rem;
+  margin-bottom: 1.25rem;
+}
+
+/* ---------- demo ---------- */
+
+.demo {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+.dropzone {
+  border: 2px dashed var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+  padding: 3rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.dropzone:hover,
+.dropzone.dragover,
+.dropzone:focus-visible {
+  border-color: var(--accent);
+  background: #182142;
+  outline: none;
+}
+
+.drop-title {
+  font-weight: 600;
+}
+
+.drop-hint {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-top: 0.35rem;
+}
+
+.status {
+  text-align: center;
+  color: var(--muted);
+  margin-top: 1rem;
+  min-height: 1.5em;
+}
+
+.status.error {
+  color: var(--bad);
+}
+
+.result {
+  margin-top: 2rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.score-card {
+  text-align: center;
+}
+
+.ring-wrap {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  margin: 0 auto;
+}
+
+.ring {
+  width: 160px;
+  height: 160px;
+  transform: rotate(-90deg);
+}
+
+.ring-bg,
+.ring-fill {
+  fill: none;
+  stroke-width: 10;
+}
+
+.ring-bg {
+  stroke: var(--border);
+}
+
+.ring-fill {
+  stroke: var(--good);
+  stroke-linecap: round;
+  stroke-dasharray: 327; /* 2π × r(52) */
+  stroke-dashoffset: 327; /* empty until a score is rendered */
+  transition: stroke-dashoffset 1s ease;
+}
+
+.score-num {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+.score-label {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.skills {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.skills-col h3 {
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.count {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.chips {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chips li {
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+}
+
+.chips-present li {
+  background: rgba(34, 211, 165, 0.15);
+  color: var(--good);
+  border: 1px solid rgba(34, 211, 165, 0.4);
+}
+
+.chips-missing li {
+  background: rgba(255, 122, 122, 0.12);
+  color: var(--bad);
+  border: 1px solid rgba(255, 122, 122, 0.35);
+}
+
+/* ---------- how it works ---------- */
+
+.how {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem 4rem;
+}
+
+.steps {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.steps h3 {
+  font-size: 1.05rem;
+  margin-bottom: 0.4rem;
+}
+
+.steps p {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.note {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-top: 1.5rem;
+}
+
+/* ---------- footer ---------- */
+
+footer {
+  border-top: 1px solid var(--border);
+  text-align: center;
+  padding: 1.5rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* ---------- small screens ---------- */
+
+@media (max-width: 720px) {
+  .result {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .skills {
+    grid-template-columns: 1fr;
+  }
+
+  .steps {
+    grid-template-columns: 1fr;
+  }
+}

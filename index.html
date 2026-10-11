@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>0 → Shipped · Resume Parser</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="nav">
+    <a class="logo" href="#top">0 → Shipped<span class="logo-sub">resume parser</span></a>
+    <nav>
+      <a href="#demo">Try it</a>
+      <a href="#how">How it works</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="top">
+      <p class="eyebrow">Mock build · no backend</p>
+      <h1>Turn any PDF resume into a <span class="accent">score</span>, in seconds.</h1>
+      <p class="lede">
+        Drop in a resume and instantly see an overall score, the skills it shows,
+        and the skills it's missing. This is the demo build of the
+        0 → Shipped resume parser.
+      </p>
+      <a class="btn" href="#demo">Try the parser</a>
+    </section>
+
+    <section class="demo" id="demo">
+      <h2>Parse a resume</h2>
+
+      <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Upload a PDF resume">
+        <input type="file" id="fileInput" accept="application/pdf,.pdf" hidden />
+        <p class="drop-title">Drop a PDF here, or click to choose one</p>
+        <p class="drop-hint">Only .pdf files · nothing leaves your browser</p>
+      </div>
+
+      <p class="status" id="status" role="status"></p>
+
+      <div class="result" id="result" hidden>
+        <div class="score-card">
+          <div class="ring-wrap">
+            <svg class="ring" viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="ring-bg" cx="60" cy="60" r="52" />
+              <circle class="ring-fill" id="ringFill" cx="60" cy="60" r="52" />
+            </svg>
+            <div class="score-num" id="scoreNum">–</div>
+          </div>
+          <div class="score-label">Resume score</div>
+        </div>
+
+        <div class="skills">
+          <div class="skills-col">
+            <h3>Skills present <span class="count" id="presentCount"></span></h3>
+            <ul class="chips chips-present" id="presentSkills"></ul>
+          </div>
+          <div class="skills-col">
+            <h3>Skills missing <span class="count" id="missingCount"></span></h3>
+            <ul class="chips chips-missing" id="missingSkills"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="how" id="how">
+      <h2>How it works</h2>
+      <ol class="steps">
+        <li>
+          <h3>1 · Upload</h3>
+          <p>Drop any PDF resume into the box above.</p>
+        </li>
+        <li>
+          <h3>2 · Analyze</h3>
+          <p>The parser scans the document for known skills and structure.</p>
+        </li>
+        <li>
+          <h3>3 · Score</h3>
+          <p>You get a 0–100 score plus present and missing skills.</p>
+        </li>
+      </ol>
+      <p class="note">Mock build: results are simulated in the browser — no server, nothing uploaded.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>0 → Shipped · resume parser demo · built with HTML, CSS &amp; JS</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
