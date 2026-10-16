@@ -49,7 +49,17 @@ export default function Dropzone({ onReport, onStatus, jobDescription }) {
         method: "POST",
         body: formData,
       });
-      const data = await response.json();
+      const responseBody = await response.text();
+      let data;
+      try {
+        data = responseBody ? JSON.parse(responseBody) : {};
+      } catch {
+        const message = response.ok
+          ? "The backend returned an invalid response. Check the backend deployment logs."
+          : `The backend returned a non-JSON error (HTTP ${response.status}). Check the backend service logs in Vercel.`;
+        throw new Error(message);
+      }
+
       if (!response.ok) {
         throw new Error(data.error || "Unable to compare the resume.");
       }
