@@ -1,6 +1,7 @@
 import { PDFParse } from "pdf-parse";
 import { Comparison } from "../config/db.js";
-import { buildComparison, validatePdfFile } from "../utils.js";
+import { analyzeResumeWithLabd } from "./labdService.js";
+import { validatePdfFile } from "../utils.js";
 
 async function extractResumeText(file) {
   if (!file || !file.buffer || !file.buffer.length) {
@@ -34,17 +35,23 @@ async function extractResumeText(file) {
 export async function compareResume(file, jobDescription = "") {
   const validationMessage = validatePdfFile(file);
   if (validationMessage) {
-    throw new Error(validationMessage);
+    const error = new Error(validationMessage);
+    error.statusCode = 400;
+    throw error;
   }
 
   const resumeText = await extractResumeText(file);
-  const comparison = buildComparison(resumeText, jobDescription);
+  const analysis = await analyzeResumeWithLabd(resumeText, jobDescription);
+  const totalSkills = analysis.present.length + analysis.missing.length;
+  const score = totalSkills
+    ? Math.round((analysis.present.length / totalSkills) * 100)
+    : 0;
   const payload = {
     fileName: file.originalname,
     jobDescription,
-    score: comparison.score,
-    present: comparison.present,
-    missing: comparison.missing,
+    score,
+    present: analysis.present,
+    missing: analysis.missing,
   };
 
   if (process.env.MONGODB_URI) {
@@ -53,6 +60,6 @@ export async function compareResume(file, jobDescription = "") {
 
   return {
     ...payload,
-    summary: `${comparison.score}% resume match`,
+    summary: `${score}% resume match`,
   };
 }

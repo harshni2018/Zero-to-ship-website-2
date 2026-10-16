@@ -1,7 +1,7 @@
 export default function Hero() {
   return (
     <section className="hero" id="top">
-      <p className="eyebrow">Resume parsing · no AI required</p>
+      <p className="eyebrow">AI-powered resume matching</p>
       <h1>
         Turn any PDF resume into a <span className="accent">score</span>, in seconds.
       </h1>

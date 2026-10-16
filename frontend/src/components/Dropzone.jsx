@@ -43,18 +43,9 @@ export default function Dropzone({ onReport, onStatus, jobDescription }) {
     const formData = new FormData();
     formData.append("resume", file);
     formData.append("jobDescription", jobDescription);
-    const apiBaseUrl = import.meta.env.VITE_API_URL?.replace(/\/+$/, "") || "";
-
-    if (!import.meta.env.DEV && !apiBaseUrl) {
-      onStatus({
-        message: "The API URL is not configured. Set VITE_API_URL to your backend deployment URL.",
-        error: true,
-      });
-      return;
-    }
 
     try {
-      const response = await fetch(`${apiBaseUrl}/api/compare`, {
+      const response = await fetch("/api/compare", {
         method: "POST",
         body: formData,
       });

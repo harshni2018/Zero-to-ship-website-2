@@ -9,7 +9,7 @@ export default function HowItWorks() {
         </li>
         <li>
           <h3>2 · Analyze</h3>
-          <p>The parser scans the document for known skills and structure.</p>
+          <p>AI compares the resume's skills with the job description.</p>
         </li>
         <li>
           <h3>3 · Score</h3>
@@ -17,8 +17,8 @@ export default function HowItWorks() {
         </li>
       </ol>
       <p className="note">
-        This version uses text-based skill matching. AI-powered analysis can be
-        added later.
+        Resume text is sent securely from the backend for AI analysis. The API
+        key is never exposed to the browser.
       </p>
     </section>
   );
