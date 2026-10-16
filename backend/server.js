@@ -18,17 +18,38 @@ app.get("/health", (_req, res) => {
   res.json({ ok: true, message: "Resume parser backend is healthy." });
 });
 
+let databaseConnection;
+
+function ensureDatabaseConnection() {
+  if (!databaseConnection) {
+    databaseConnection = connectMongo();
+  }
+  return databaseConnection;
+}
+
+app.use((_req, _res, next) => {
+  ensureDatabaseConnection().then(() => next()).catch(next);
+});
+
 app.use(comparisonRoutes);
 app.use(errorHandler);
 
 async function start() {
-  await connectMongo();
-  app.listen(port, () => {
-    console.log(`Resume parser API is running on http://localhost:${port}`);
+  await ensureDatabaseConnection();
+  await new Promise((resolve, reject) => {
+    const server = app.listen(port, () => {
+      console.log(`Resume parser API is running on http://localhost:${port}`);
+      resolve(server);
+    });
+    server.once("error", reject);
   });
 }
 
-start().catch((error) => {
-  console.error("Could not start the resume parser API:", error.message);
-  process.exitCode = 1;
-});
+if (!process.env.VERCEL) {
+  start().catch((error) => {
+    console.error(`Could not start the resume parser API on port ${port}:`, error.message);
+    process.exitCode = 1;
+  });
+}
+
+export default app;

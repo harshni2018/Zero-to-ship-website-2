@@ -17,7 +17,8 @@ export default function Dropzone({ onReport, onStatus, jobDescription }) {
     };
   }, []);
 
-  function handleFile(file) {
+  async function handleFile(file) {
+    const requestId = ++latestRequestId.current;
     if (!file) return;
 
     if (!isPdf(file)) {
@@ -39,38 +40,52 @@ export default function Dropzone({ onReport, onStatus, jobDescription }) {
     onReport(null);
     onStatus({ message: `Comparing ${file.name} against the job description…`, error: false });
 
-    const requestId = ++latestRequestId.current;
     const formData = new FormData();
     formData.append("resume", file);
     formData.append("jobDescription", jobDescription);
+    const apiBaseUrl = import.meta.env.VITE_API_URL?.replace(/\/+$/, "") || "";
 
-    fetch("/api/compare", {
-      method: "POST",
-      body: formData,
-    })
-      .then(async (response) => {
-        const data = await response.json().catch(() => ({}));
-        if (!response.ok) {
-          throw new Error(data.error || "Unable to compare the resume.");
-        }
-        return data;
-      })
-      .then((report) => {
-        if (requestId !== latestRequestId.current) return;
-        onReport({
-          score: report.score,
-          present: report.present || [],
-          missing: report.missing || [],
-        });
-        onStatus({ message: `Compared ${file.name} successfully`, error: false });
-      })
-      .catch((error) => {
-        if (requestId !== latestRequestId.current) return;
-        onStatus({
-          message: error.message || `Couldn't compare ${file.name}. Try another PDF.`,
-          error: true,
-        });
+    if (!import.meta.env.DEV && !apiBaseUrl) {
+      onStatus({
+        message: "The API URL is not configured. Set VITE_API_URL to your backend deployment URL.",
+        error: true,
       });
+      return;
+    }
+
+    try {
+      const response = await fetch(`${apiBaseUrl}/api/compare`, {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Unable to compare the resume.");
+      }
+      if (
+        !Number.isFinite(data.score) ||
+        data.score < 0 ||
+        data.score > 100 ||
+        !Array.isArray(data.present) ||
+        !Array.isArray(data.missing)
+      ) {
+        throw new Error("The server returned an invalid comparison result.");
+      }
+      if (requestId !== latestRequestId.current) return;
+
+      onReport({
+        score: data.score,
+        present: data.present,
+        missing: data.missing,
+      });
+      onStatus({ message: `Compared ${file.name} successfully`, error: false });
+    } catch (error) {
+      if (requestId !== latestRequestId.current) return;
+      onStatus({
+        message: error instanceof Error ? error.message : `Couldn't compare ${file.name}. Try another PDF.`,
+        error: true,
+      });
+    }
   }
 
   return (
