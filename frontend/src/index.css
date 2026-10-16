@@ -313,6 +313,14 @@ footer {
 
 /* ---------- small screens ---------- */
 
+/* Respect users who turn animations down at the OS level: without this the
+   CSS transition would still animate the ring even when JS skips its loop. */
+@media (prefers-reduced-motion: reduce) {
+  .ring-fill {
+    transition: none;
+  }
+}
+
 @media (max-width: 720px) {
   .result {
     grid-template-columns: 1fr;
