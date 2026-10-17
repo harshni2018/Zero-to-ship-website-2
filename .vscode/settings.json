@@ -1,3 +1,4 @@
 {
-    "labd.mode": "agent"
+    "labd.mode": "agent",
+    "postman.settings.dotenv-detection-notification-visibility": false
 }
