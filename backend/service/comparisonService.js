@@ -1,6 +1,6 @@
 import { PDFParse } from "pdf-parse";
 import { Comparison } from "../config/db.js";
-import { analyzeResumeWithCopilot } from "./copilotService.js";
+import { analyzeResumeWithGemini } from "./geminiService.js";
 import { validatePdfFile } from "../utils.js";
 
 async function extractResumeText(file) {
@@ -41,7 +41,7 @@ export async function compareResume(file, jobDescription = "") {
   }
 
   const resumeText = await extractResumeText(file);
-  const analysis = await analyzeResumeWithCopilot(resumeText, jobDescription);
+  const analysis = await analyzeResumeWithGemini(resumeText, jobDescription);
   const totalSkills = analysis.present.length + analysis.missing.length;
   const score = totalSkills
     ? Math.round((analysis.present.length / totalSkills) * 100)
