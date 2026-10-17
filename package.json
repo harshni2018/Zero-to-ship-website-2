@@ -11,5 +11,9 @@
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "^1.0.11",
+    "pdfjs-dist": "^5.5.207"
   }
 }
