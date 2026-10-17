@@ -45,7 +45,8 @@ export default function Dropzone({ onReport, onStatus, jobDescription }) {
     formData.append("jobDescription", jobDescription);
 
     try {
-      const response = await fetch("/api/compare", {
+      const apiUrl = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
+      const response = await fetch(`${apiUrl}/api/compare`, {
         method: "POST",
         body: formData,
       });
