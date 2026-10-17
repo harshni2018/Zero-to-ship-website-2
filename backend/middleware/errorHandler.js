@@ -11,7 +11,9 @@ export function errorHandler(error, _req, res, _next) {
     : 500;
   if (status >= 500) {
     console.error("Request failed:", error);
-    return res.status(500).json({ error: "Internal server error." });
+    if (status === 500) {
+      return res.status(status).json({ error: "Internal server error." });
+    }
   }
 
   return res.status(status).json({ error: error.message || "Invalid request." });
